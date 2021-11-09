@@ -69,18 +69,23 @@
 
                 <h5>Habilidades</h5>
 
+                @foreach($skills as $skill)
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                    <label class="form-check-label" for="inlineCheckbox1">1</label>
+                    <input name="skills[{{ $skill->id }}]" class="form-check-input" type="checkbox" id="skill_{{ $skill->id }}" value="{{ $skill->id }}"
+                    {{ old('skills.' . $skill->id) ? 'checked' : '' }}>
+                    <label class="form-check-label" for="skill_{{ $skill->id }}">{{ $skill->name }}</label>
                 </div>
+                @endforeach
+
+                <h5 class="mt-3">Rol</h5>
+
+                @foreach($roles as $role => $name)
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
-                    <label class="form-check-label" for="inlineCheckbox2">2</label>
+                    <input class="form-check-input" type="radio" name="role" id="role_{{ $role }}" value="{{ $role }}"
+                    {{ old('role') == $role ? ' checked' : '' }}>
+                    <label class="form-check-label" for="role_{{ $role }}">{{ $name }}</label>
                 </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" disabled>
-                    <label class="form-check-label" for="inlineCheckbox3">3 (disabled)</label>
-                </div>
+                @endforeach
 
                 <div class="form-group mt-4">
                     <button type="submit" class="btn-primary btn">Crear usuario</button>

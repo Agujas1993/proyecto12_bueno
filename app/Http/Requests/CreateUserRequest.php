@@ -29,11 +29,17 @@ class CreateUserRequest extends FormRequest
             'name' => 'required|regex:/^[a-zA-Z áéíóúÁÉÍÓÚñÑ]+$/u',
             'email' => 'required|email|unique:users,email|regex:/(.+)@(.+)\.(.+)/i',
             'password' => 'required|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
+            'role' => '',
             'bio' => 'required',
             'twitter' => 'nullable|present|url',
             'profession_id' => [
                 'nullable', 'present',
-                Rule::exists('professions', 'id')->whereNull('deleted_at')],
+                Rule::exists('professions', 'id')->whereNull('deleted_at')
+            ],
+            'skills' => [
+                'array',
+                Rule::exists('skills', 'id'),
+            ],
         ];
     }
 
