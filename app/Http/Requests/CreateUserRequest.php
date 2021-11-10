@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Role;
 use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -29,7 +30,10 @@ class CreateUserRequest extends FormRequest
             'name' => 'required|regex:/^[a-zA-Z áéíóúÁÉÍÓÚñÑ]+$/u',
             'email' => 'required|email|unique:users,email|regex:/(.+)@(.+)\.(.+)/i',
             'password' => 'required|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
-            'role' => '',
+            'role' => [
+                'nullable',
+                Rule::in(Role::getList()),
+            ],
             'bio' => 'required',
             'twitter' => 'nullable|present|url',
             'profession_id' => [

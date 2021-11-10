@@ -2,18 +2,18 @@
 
 namespace Tests;
 
+use App\Profession;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
-    use CreatesApplication;
+    use CreatesApplication, TestHelpers;
 
-    public function assertDatabaseEmpty($table, $connection = null)
+    protected $defaultData;
+
+    public function setUp()
     {
-        $total = $this->getConnection($connection)->table($table)->count();
-        $this->assertSame(0, $total, sprintf(
-            "Failed asserting the table [%s] is empty. %s %s found", $table,$total, str_plural('row', $total)
-        ));
+        parent::setUp();    //Llama al padre
+        $this->withoutExceptionHandling(); //Para quitar error 500 en todos los test y saber cuál es el error
     }
-    
 }
