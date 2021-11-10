@@ -35,7 +35,7 @@ class User extends Authenticatable
 
     public function profile()
     {
-        return $this->hasOne(UserProfile::class);
+        return $this->hasOne(UserProfile::class)->withDefault();
     }
 
     public function skills()
@@ -73,7 +73,6 @@ class User extends Authenticatable
             ]);
 
             $user->skills()->attach($data['skills'] ?? []);
-
         });
     }
 }
