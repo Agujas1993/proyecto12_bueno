@@ -3,15 +3,9 @@
 @section('title', 'Crear nuevo usuario')
 
 @section('content')
-    <div class="card">
+    @card
+        @slot('header', 'Crear nuevo usuario')
 
-        <div class="card-header h4">
-
-            <h1>Crear nuevo usuario</h1>
-
-        </div>
-    </div>
-            <div class="card-body">
             @include('shared._errors')
 
             <form action="{{ route('users.store') }}" method="POST">
@@ -23,7 +17,5 @@
                     <a href="{{ route('users.index') }}" class="btn btn-link">Regresar al listado de usuarios</a>
                 </div>
             </form>
-
-        </div>
-
+    @endcard
 @endsection
