@@ -4,7 +4,7 @@ namespace Tests\Feature\Admin;
 
 use App\Profession;
 use App\UserProfile;
-use http\Client\Curl\User;
+use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -17,7 +17,6 @@ class UserProfileTest extends TestCase
     protected $defaultData = [
         'name' => 'Pepe',
         'email' => 'pepe@gmail.es',
-        'password' => '123456*Sa',
         'bio' => 'Programador de Laravel y Vue.js',
         'twitter' => 'https://twitter.com/pepe',
     ];
@@ -38,7 +37,6 @@ class UserProfileTest extends TestCase
         $response = $this->put('editar-perfil', [
             'name' => 'Pepe',
             'email' => 'pepe@gmail.es',
-            'password' => '123456*Sa',
             'bio' => 'Programador de Laravel y Vue.js',
             'twitter' => 'https://twitter.com/pepe',
             'profession_id' => $newProfession->id,
@@ -46,10 +44,9 @@ class UserProfileTest extends TestCase
 
         $response->assertRedirect('editar-perfil');
 
-        $this->assertCredentials([
+        $this->assertDatabaseHas('users', [
             'name' => 'Pepe',
             'email' => 'pepe@gmail.es',
-            'password' => '123456*Sa',
         ]);
 
         $this->assertDatabaseHas('user_profiles', [
@@ -57,6 +54,45 @@ class UserProfileTest extends TestCase
             'bio' => 'Programador de Laravel y Vue.js',
             'twitter' => 'https://twitter.com/pepe',
             'profession_id' => $newProfession->id,
+        ]);
+    }
+
+    /** @test */
+    public function the_user_cannot_change_its_role()
+    {
+        $user = factory(User::class)->create([
+            'role' => 'user',
+        ]);
+
+        $response = $this->put('editar-perfil', $this->withData([
+            'role' => 'admin'
+        ]));
+
+        $response->assertRedirect();
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'role' => 'user'
+        ]);
+    }
+
+    /** @test */
+    public function the_user_cannot_change_its_password()
+    {
+        $user = factory(User::class)->create([
+            'password' => bcrypt('123456*Sa'),
+        ]);
+
+        $response = $this->put('editar-perfil', $this->withData([
+            'email' => 'pepe@gmail.es',
+            'password' => bcrypt('new654321')
+        ]));
+
+        $response->assertRedirect();
+
+        $this->assertCredentials([
+            'email' => 'pepe@gmail.es',
+            'password' => '123456*Sa' //NO BCRYPT NUNCA porque el assertCredential ya lo hace por defecto creo*
         ]);
     }
 }
