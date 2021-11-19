@@ -74,23 +74,18 @@
 
 <!-- Begin page content -->
 <main role="main" class="flex-shrink-0">
-    <div class="row pt-5 mt-5 ml-5">
-        <div class="col-8">
+    <div class="row mt-3">
+        <div class="col-1"></div>
+        <div class="col-10">
             @yield('content')
         </div>
-<div class="col-4">
-        @yield('sidebar')
-</div>
+        <div class="col-1"></div>
     </div>
-
-
 </main>
 
 <footer class="footer mt-auto py-3">
     <div class="container">
-        <span class="text-muted">
-            @yield('footer')
-        </span>
+        <span class="text-muted">Curso de Laravel desde 0 para 2DAW 2021-2022</span>
     </div>
 </footer>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
