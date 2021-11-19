@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', 'Listado de usuarios')
+@section('title', 'Usuarios')
 
 @section('content')
         <h1>{{ $title }}</h1>
@@ -53,6 +53,7 @@
                 @endforeach
                 </tbody>
             </table>
+            {{ $users->links() }} {{--Para paginar, hace que salgan los número de las páginas--}}
         @else
             <p>No hay usuarios registrados</p>
 

@@ -15,7 +15,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::all();
+        $users = User::orderBy('created_at', 'DESC')->paginate(); //Para paginar
 
         $title = 'Usuarios';
 
@@ -24,7 +24,7 @@ class UserController extends Controller
 
     public function trashed()
     {
-        $users = User::onlyTrashed()->get();
+        $users = User::onlyTrashed()->paginate();
 
         $title = 'Listado de usuarios en la papelera';
 
@@ -66,16 +66,20 @@ class UserController extends Controller
 
     public function trash(User $user)
     {
+
+        $user->profile()->delete();
         $user->delete();
 
         return redirect()->route('users.index');
     }
     
-    public function destroy(User $user)
+    public function destroy($id)
     {
+        $user = User::onlyTrashed()->where('id', $id)->firstOrFail();
+
         $user->forceDelete(); //borra al 100%
 
-        return redirect()->route('users.index');
+        return redirect()->route('users.trashed');
     }
 
     protected function form($view, User $user)
