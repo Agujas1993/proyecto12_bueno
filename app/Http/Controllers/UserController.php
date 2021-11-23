@@ -10,12 +10,25 @@ use App\User;
 use App\UserProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use function foo\func;
 
 class UserController extends Controller
 {
     public function index()
     {
-        $users = User::orderBy('created_at', 'DESC')->paginate(); //Para paginar
+        $users = User::query()
+            ->when(request('team'), function ($query, $team){
+                if($team === 'with_team'){
+                    $query->has('team');
+                } elseif ($team === 'without_team'){
+                   $query->doesntHave('team');
+                }
+            })
+            ->when(request('search'), function ($query, $search){ //Para buscar nombre exacto
+                $query->where('name', 'LIKE', "%{$search}%") //Para buscar nombre por cacho
+                ->orWhere('email','LIKE' ,"%{$search}%"); //Para buscar email por cacho
+            })
+            ->orderBy('created_at', 'DESC')->paginate(); //Para paginar
 
         $title = 'Usuarios';
 
