@@ -24,11 +24,9 @@ class UserController extends Controller
                    $query->doesntHave('team');
                 }
             })
-            ->when(request('search'), function ($query, $search){ //Para buscar nombre exacto
-                $query->where('name', 'LIKE', "%{$search}%") //Para buscar nombre por cacho
-                ->orWhere('email','LIKE' ,"%{$search}%"); //Para buscar email por cacho
-            })
-            ->orderBy('created_at', 'DESC')->paginate(); //Para paginar
+            ->search(request('search'))
+            ->orderBy('created_at', 'DESC')
+            ->paginate(); //Para paginar
 
         $title = 'Usuarios';
 

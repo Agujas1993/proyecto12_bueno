@@ -57,5 +57,19 @@ class User extends Authenticatable
         return static::where('email', $email)->first();
     }
 
+    public function scopeSearch($query, $search)
+    {
+        if (empty($search)) {
+            return;
+        }
+
+            $query->where(function ($query) use ($search){ //Para unir dos consultas en una
+                $query->where('name', 'LIKE', "%{$search}%") //Para buscar nombre exacto y por cachos
+                ->orWhere('email','LIKE' ,"%{$search}%") //Para buscar email exacto y por cachos
+                ->orWhereHas('team', function ($query) use ($search){
+                    $query->where('name', 'LIKE',"%{$search}%"); //Para buscar nombre de equipo exacto y por cachos
+                });
+            });
+    }
 
 }
