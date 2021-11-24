@@ -17,6 +17,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::query()
+            ->with('team', 'skills', 'profile.profession') //Precargar equipos de la bd, menos consultas.
             ->when(request('team'), function ($query, $team){
                 if($team === 'with_team'){
                     $query->has('team');
@@ -26,7 +27,9 @@ class UserController extends Controller
             })
             ->search(request('search'))
             ->orderBy('created_at', 'DESC')
-            ->paginate(); //Para paginar
+            ->paginate();
+
+        $users->appends(request(['search', 'team'])); /*Solucion error cambiar página y se borran filtros*/
 
         $title = 'Usuarios';
 
@@ -88,7 +91,7 @@ class UserController extends Controller
     {
         $user = User::onlyTrashed()->where('id', $id)->firstOrFail();
 
-        $user->forceDelete(); //borra al 100%
+        $user->forceDelete();
 
         return redirect()->route('users.trashed');
     }

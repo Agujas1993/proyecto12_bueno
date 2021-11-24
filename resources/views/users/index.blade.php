@@ -23,7 +23,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @each('users._row', $users, 'user') {{--Para pasar variables a subvistas--}}
+                    @each('users._row', $users, 'user')
                     </tbody>
                 </table>
                 {{ $users->links() }}
