@@ -14,9 +14,13 @@ class FilterUsersTest extends TestCase
    /** @test */
     public function filter_users_by_state_active()
     {
-        self::markTestIncomplete();
-        $activeUser = factory(User::class)->create();
-        $inactiveUser = factory(User::class)->create();
+
+        $activeUser = factory(User::class)->create([
+            'active' => true,
+        ]);
+        $inactiveUser = factory(User::class)->create([
+            'active' => false,
+        ]);
 
         $response = $this->get('usuarios?state=active');
 
@@ -28,9 +32,13 @@ class FilterUsersTest extends TestCase
     /** @test */
     public function filter_users_by_state_inactive()
     {
-        self::markTestIncomplete();
-        $activeUser = factory(User::class)->create();
-        $inactiveUser = factory(User::class)->create();
+
+        $activeUser = factory(User::class)->create([
+            'active' => true,
+        ]);
+        $inactiveUser = factory(User::class)->create([
+            'active' => false,
+        ]);
 
         $response = $this->get('usuarios?state=inactive');
 
