@@ -16,12 +16,13 @@ class ShowUsersTest extends TestCase
     public function it_displays_the_user_details()
     {
         $user = factory(User::class)->create([
-            'name' => 'José Martínez',
+            'first_name' => 'José',
+            'last_name' => 'Martínez'
         ]);
 
         $this->get('usuarios/' . $user->id)
             ->assertStatus(200)
-            ->assertSee($user->name);
+            ->assertSee($user->name); //no hay que cambiar a first_name por el getter que hicimos
     }
 
     /** @test */

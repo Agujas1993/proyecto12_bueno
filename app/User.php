@@ -63,16 +63,14 @@ class User extends Authenticatable
             return;
         }
 
-            $query->where(function ($query) use ($search){ //Para unir dos consultas en una
-                $query->where('name', 'LIKE', "%{$search}%") //Para buscar nombre exacto y por cachos
-                ->orWhere('email','LIKE' ,"%{$search}%") //Para buscar email exacto y por cachos
-                ->orWhereHas('team', function ($query) use ($search){
-                    $query->where('name', 'LIKE',"%{$search}%"); //Para buscar nombre de equipo exacto y por cachos
-                });
-            });
+        $query->whereRaw('CONCAT(first_name, " ", last_name) like ?', "%{$search}%") //Para buscar por nombre completo
+        ->orWhere('email','LIKE' ,"%{$search}%")
+        ->orWhereHas('team', function ($query) use ($search){
+            $query->where('name', 'LIKE',"%{$search}%");
+        });
     }
 
-    public function getFullNameAttribute()
+    public function getNameAttribute()
     {
         return "{$this->first_name} {$this->last_name}";
     }

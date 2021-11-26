@@ -34,7 +34,8 @@ class UserSeeder extends Seeder
     {
         $user = User::create([
             'team_id' => $this->teams->firstWhere('name', 'IES Ingeniero')->id,
-            'name' => 'Juan Martínez',
+            'first_name' => 'Juan',
+            'last_name' => 'Martínez',
             'email' => 'Juan@gmail.es',
             'password' => bcrypt('123456*Sa'),
             'role' => 'admin',

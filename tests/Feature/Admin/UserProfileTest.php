@@ -15,7 +15,8 @@ class UserProfileTest extends TestCase
     use RefreshDatabase;
 
     protected $defaultData = [
-        'name' => 'Pepe',
+        'first_name' => 'Pepe',
+        'last_name' => 'Pérez',
         'email' => 'pepe@gmail.es',
         'bio' => 'Programador de Laravel y Vue.js',
         'twitter' => 'https://twitter.com/pepe',
@@ -34,18 +35,15 @@ class UserProfileTest extends TestCase
         $response = $this->get('editar-perfil');
         $response->assertStatus(200);
 
-        $response = $this->put('editar-perfil', [
-            'name' => 'Pepe',
-            'email' => 'pepe@gmail.es',
-            'bio' => 'Programador de Laravel y Vue.js',
-            'twitter' => 'https://twitter.com/pepe',
+        $response = $this->put('editar-perfil', $this->withData([
             'profession_id' => $newProfession->id,
-        ]);
+        ]));
 
         $response->assertRedirect('editar-perfil');
 
         $this->assertDatabaseHas('users', [
-            'name' => 'Pepe',
+            'first_name' => 'Pepe',
+            'last_name' => 'Pérez',
             'email' => 'pepe@gmail.es',
         ]);
 

@@ -25,7 +25,7 @@ class UserController extends Controller
                    $query->doesntHave('team');
                 }
             })
-            ->search(request('search'))
+            ->search(request('search')) //search es un scope, es decir creamos la consulta en otro lugar
             ->orderBy('created_at', 'DESC')
             ->paginate();
 
