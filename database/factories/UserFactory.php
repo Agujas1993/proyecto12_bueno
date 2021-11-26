@@ -24,3 +24,8 @@ $factory->define(App\User::class, function (Faker $faker) {
 
     ];
 });
+
+$factory->afterCreating(App\User::class, function ($user, $faker){
+   $user->profile()->save(factory(\App\UserProfile::class)->make()); //Con esto lo que hacemos es crear un perfil
+    //asociado a un usuario
+});

@@ -7,7 +7,7 @@
         <p>
             <a href="{{ route('users.create') }}" class="btn btn-info">Crear nuevo usuario...</a>
         </p>
-        @include('users._filters')
+        @includeWhen(isset($states), 'users._filters')    {{--Para que los filtros sólo estén en el index --}}
         @if( $users->count() )
 
             <div class="table-responsive-lg">
