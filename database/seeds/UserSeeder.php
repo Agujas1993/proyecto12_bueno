@@ -32,17 +32,18 @@ class UserSeeder extends Seeder
 
     private function createAdmin()
     {
-        $user = User::create([
+        $admin = User::create([
             'team_id' => $this->teams->firstWhere('name', 'IES Ingeniero')->id,
             'first_name' => 'Juan',
             'last_name' => 'Martínez',
             'email' => 'Juan@gmail.es',
             'password' => bcrypt('123456*Sa'),
             'role' => 'admin',
-            'created_at' => now()->addDay()
+            'created_at' => now()->addDay(),
+            'active' => true
         ]);
 
-        $user->profile()->create([
+        $admin->profile()->create([
             'bio' => 'Programador',
             'profession_id' => $this->professions->where('title', 'Desarrollador Back-End')->first()->id,
         ]);
@@ -53,6 +54,7 @@ class UserSeeder extends Seeder
         foreach (range(1, 999) as $i) {
             $user = factory(User::class)->create([
                 'team_id' => rand(0, 2) ? null : $this->teams->random()->id,
+                'active' =>  rand(0,4) ? true : false,
             ]);
 
             $user->skills()->attach($this->skills->random(rand(0, 7)));

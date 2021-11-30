@@ -27,6 +27,10 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    protected $casts = [
+      'active' => 'bool',
+    ];
+
     public function profession()
     {
         return $this->belongsTo(Profession::class);
@@ -81,9 +85,30 @@ class User extends Authenticatable
         }
     }
 
+    public function scopeByRole($query, $role)
+    {
+        if (in_array($role, ['admin', 'user'])) {
+            return $query->where('role', $role);
+        }
+    }
+
     public function getNameAttribute()
     {
         return "{$this->first_name} {$this->last_name}";
     }
 
+    public function setStateAttribute($value)
+    {
+        $this->attributes['active'] = $value == 'active'; //para que en la bd en la columna se guarde true o false
+        //pero en el modelo sea 'active' o 'inactive'
+    }
+
+    public function getStateAttribute()
+    {
+        if ($this->active !== null){
+            return $this->active ? 'active' : 'inactive';  //El if es para que no salga marcado 'inactive' como default
+        }
+
+    }
+    
 }

@@ -26,7 +26,7 @@ class ListUsersTest extends TestCase
 
         $this->get('usuarios')
             ->assertStatus(200)
-            ->assertSee('Usuarios')
+            ->assertSee(trans('users.title.index'))
             ->assertSee('Joel')
             ->assertSee('Ellie');
 
@@ -38,7 +38,8 @@ class ListUsersTest extends TestCase
     {
         $this->get('usuarios')
             ->assertStatus(200)
-            ->assertSee('Usuarios')
+            ->assertSee(trans('users.title.index')) //Es aconsejable hacer esto, ya que si cambias el
+                //texto en un sitio no te va a fallar la prueba porque se cambia al instante
             ->assertSee('No hay usuarios registrados');
     }
 
@@ -56,7 +57,7 @@ class ListUsersTest extends TestCase
 
         $this->get('usuarios/papelera')
             ->assertStatus(200)
-            ->assertSee('Listado de usuarios en la papelera')
+            ->assertSee(trans('users.title.trash'))
             ->assertSee('Joel')
             ->assertDontSee('Ellie');
     }

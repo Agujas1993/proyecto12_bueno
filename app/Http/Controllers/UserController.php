@@ -26,20 +26,18 @@ class UserController extends Controller
                 }
             })
             ->byState(request('state')) //Otro scope pero para el estado
+            ->byRole(request('role'))   //Otro scope pero para el rol
             ->search(request('search')) //search es un scope, es decir creamos la consulta en otro lugar
             ->orderBy('created_at', 'DESC')
             ->paginate();
 
-        $users->appends(request(['search', 'team'])); /*Solucion error cambiar página y se borran filtros*/
-
-        $title = 'Usuarios';
+        $users->appends(request(['search', 'team', 'state', 'role'])); /*Solucion error cambiar página y se borran filtros*/
+        //añadido el 'state' y 'role' que hace que cuando paginas no se pierdan los filtros correspondientes
 
         return view('users.index', [
             'users' => $users,                          //Tenemos que agregar más variables a las vistas
-            'title' => $title,
-            'roles' => trans('users.filters.roles'),
+            'view' => 'index',
             'skills' => Skill::orderBy('name')->get(),
-            'states' => trans('users.filters.states'),
             'checkedSkills' => collect(request('skills')) //Para memoria
 
         ]);
@@ -49,9 +47,10 @@ class UserController extends Controller
     {
         $users = User::onlyTrashed()->paginate();
 
-        $title = 'Listado de usuarios en la papelera';
-
-        return view('users.index', compact('users', 'title'));
+        return view('users.index',[
+            'users' => $users,
+            'view' => 'trash',
+        ]);
     }
 
     public function create()
@@ -111,7 +110,6 @@ class UserController extends Controller
             'user' =>  $user,
             'professions' => Profession::orderBy('title', 'ASC')->get(),
             'skills' => Skill::orderBy('name', 'ASC')->get(),
-            'roles' => trans('users.roles')
         ]);
     }
 }

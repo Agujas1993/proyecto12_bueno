@@ -3,11 +3,16 @@
 @section('title', 'Usuarios')
 
 @section('content')
-        <h1>{{ $title }}</h1>
+        <h1>{{ trans('users.title.' . $view) }}</h1>
         <p>
+            @if($view == 'index')
+            <a href="{{ route('users.trashed') }}" class="btn btn-outline-dark">Ver papelera</a>
             <a href="{{ route('users.create') }}" class="btn btn-info">Crear nuevo usuario...</a>
+            @else
+                <a href="{{ route('users.index') }}" class="btn btn-outline-dark">Regresar al listado de usuarios</a>
+            @endif
         </p>
-        @includeWhen(isset($states), 'users._filters')    {{--Para que los filtros sólo estén en el index --}}
+        @includeWhen($view == 'index', 'users._filters')    {{--Le quitamos el isset porque es directamente un booleano --}}
         @if( $users->count() )
 
             <div class="table-responsive-lg">
