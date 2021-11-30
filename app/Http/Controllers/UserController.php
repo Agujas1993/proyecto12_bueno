@@ -18,16 +18,14 @@ class UserController extends Controller
     {
         $users = User::query()
             ->with('team', 'skills', 'profile.profession') //Precargar equipos de la bd, menos consultas.
-            ->when(request('team'), function ($query, $team){
+            ->when(request('team'), function ($query, $team){   //Esto también se puede convertir en un scope
                 if($team === 'with_team'){
                     $query->has('team');
                 } elseif ($team === 'without_team'){
                    $query->doesntHave('team');
                 }
             })
-            ->byState(request('state')) //Otro scope pero para el estado
-            ->byRole(request('role'))   //Otro scope pero para el rol
-            ->search(request('search')) //search es un scope, es decir creamos la consulta en otro lugar
+            ->filterBy(request()->all(['state', 'role', 'search']))     //Para ahorrar líneas
             ->orderBy('created_at', 'DESC')
             ->paginate();
 
