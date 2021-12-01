@@ -84,7 +84,10 @@ class User extends Authenticatable
         if ($this->active !== null){
             return $this->active ? 'active' : 'inactive';  //El if es para que no salga marcado 'inactive' como default
         }
-
     }
-    
+
+    public function scopeFilterBy($query, QueryFilter $filters, array $data)
+    {
+        return $filters->applyto($query, $data);    //Con esto hacemos que el método acepte otro parámetro
+    }
 }

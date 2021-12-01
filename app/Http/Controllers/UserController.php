@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Profession;
 use App\Skill;
 use App\User;
+use App\UserFilter;
 use App\UserProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,7 +15,7 @@ use function foo\func;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(UserFilter $userFilter)
     {
         $users = User::query()
             ->with('team', 'skills', 'profile.profession') //Precargar equipos de la bd, menos consultas.
@@ -25,12 +26,11 @@ class UserController extends Controller
                    $query->doesntHave('team');
                 }
             })
-            ->filterBy(request()->all(['state', 'role', 'search']))     //Para ahorrar líneas
+            ->filterBy($userFilter, request()->only(['state', 'role', 'search']))
             ->orderBy('created_at', 'DESC')
             ->paginate();
 
-        $users->appends(request(['search', 'team', 'state', 'role'])); /*Solucion error cambiar página y se borran filtros*/
-        //añadido el 'state' y 'role' que hace que cuando paginas no se pierdan los filtros correspondientes
+        $users->appends($userFilter->valid());  //Con esto hacemos que en la url estén todos los parámetros bien
 
         return view('users.index', [
             'users' => $users,                          //Tenemos que agregar más variables a las vistas
