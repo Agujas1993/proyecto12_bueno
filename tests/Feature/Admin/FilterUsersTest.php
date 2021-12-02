@@ -40,7 +40,7 @@ class FilterUsersTest extends TestCase
             ->contains($inactiveUser)
             ->notContains($activeUser);
     }
-    
+
     /** @test */
     public function filter_users_by_role_admin()
     {
@@ -76,6 +76,7 @@ class FilterUsersTest extends TestCase
     /** @test */
     public function filter_users_by_skill()
     {
+
         $php = factory(Skill::class)->create(['name' => 'php']);
         $css = factory(Skill::class)->create(['name' => 'css']);
 
@@ -83,12 +84,12 @@ class FilterUsersTest extends TestCase
         $backendDev->skills()->attach($php);
 
         $fullStackDev = factory(User::class)->create();
-        $backendDev->skills()->attach([$php->id, $css->id]);
+        $fullStackDev->skills()->attach([$php->id, $css->id]);
 
         $frontendDev = factory(User::class)->create();
         $frontendDev->skills()->attach($css);
 
-        $response = $this->get("usuarios?skills[0]={$php->id}&skills[1]={css->id}");
+        $response = $this->get("usuarios?skills[0]={$php->id}&skills[1]={$css->id}");
 
         $response->assertStatus(200);
 
