@@ -270,7 +270,7 @@ class CreateUsersTest extends TestCase
         $this->from('usuarios/crear')
             ->post('usuarios', $this->withData([
                 'email' => 'correo-no@valido',
-            ]))->assertSessionHasErrors(['email' => 'El email no es válido']);
+            ]))->assertSessionHasErrors(['email']);
 
     }
 

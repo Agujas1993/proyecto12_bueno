@@ -14,12 +14,12 @@ class CreateUserProfilesTable extends Migration
     public function up()
     {
         Schema::create('user_profiles', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('bio', 1000);
             $table->string('twitter')->nullable();
-            $table->unsignedInteger('profession_id')->nullable();
+            $table->unsignedBigInteger('profession_id')->nullable();
             $table->foreign('profession_id')->references('id')->on('professions');
-            $table->unsignedInteger('user_id')->unique();  //Para evitar que un usuario tenga más de un perfil
+            $table->unsignedBigInteger('user_id')->unique();  //Para evitar que un usuario tenga más de un perfil
             $table->foreign('user_id')->references('id')->on('users')
                 ->onDelete('CASCADE');
 
